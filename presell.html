@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Acesso Seguro</title>
+  
+  <meta name="robots" content="noindex, nofollow" />
+  
+  <!-- Preload & Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      width: 100%;
+      background-color: #060e0a;
+      /* Fundo com animais e vegetação */
+      background-image: 
+        linear-gradient(180deg, rgba(6, 14, 10, 0.45) 0%, rgba(6, 14, 10, 0.6) 50%, rgba(6, 14, 10, 0.92) 100%),
+        url('bg-presell.jpg');
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 20px 16px;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* Container Central */
+    .main-container {
+      flex: 1;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto 0;
+      text-align: center;
+      gap: 32px;
+    }
+
+    /* Logomarca */
+    .logo-wrapper {
+      width: 100%;
+      max-width: 290px;
+      animation: floatLogo 3.5s ease-in-out infinite;
+    }
+
+    .logo-img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 35px rgba(245, 158, 11, 0.4));
+    }
+
+    /* Caixa do Botão de Redirecionamento */
+    .action-box {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Botão com Barra de Progresso e Spinner */
+    .btn-redirect {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 20px 24px;
+      border-radius: 18px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      border: 1px solid rgba(110, 231, 183, 0.5);
+      box-shadow: 
+        0 14px 30px -4px rgba(16, 185, 129, 0.65), 
+        0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+      animation: pulseGlow 2.2s infinite;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-redirect:hover, .btn-redirect:active {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 18px 36px -2px rgba(16, 185, 129, 0.85);
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+
+    /* Barra de progresso interna que preenche em 3 segundos */
+    .progress-bar-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      box-shadow: 0 0 10px #fbbf24;
+      border-radius: 0 0 18px 18px;
+    }
+
+    /* Spinner Animado */
+    .btn-spinner {
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .btn-text-content {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .countdown-number {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    /* Subtexto manual */
+    .subtext-click {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .subtext-click strong {
+      color: #34d399;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Rodapé Discreto */
+    footer {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.5;
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+
+    .meta-disclaimer {
+      font-size: 9.5px;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* Modal Simples de Políticas */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .modal-content {
+      background: #0f1d16;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      border-radius: 16px;
+      max-width: 440px;
+      width: 100%;
+      padding: 22px;
+      color: #d1d5db;
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .modal-content h3 {
+      color: #fbbf24;
+      font-size: 17px;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .modal-close {
+      margin-top: 18px;
+      width: 100%;
+      padding: 12px;
+      background: #142a1f;
+      color: #ffffff;
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Animações */
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 12px 26px -4px rgba(16, 185, 129, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+      }
+      50% {
+        box-shadow: 0 18px 36px 0px rgba(16, 185, 129, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+      }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Elementos Centrais: Fundo, Logomarca e Botão de Redirecionamento -->
+  <main class="main-container">
+    
+    <!-- Logomarca Oficial (com fallback automático) -->
+    <div class="logo-wrapper">
+      <img 
+        src="logo.png" 
+        alt="Logo" 
+        class="logo-img" 
+        onerror="this.onerror=null; this.src='https://www.icobicho.com/img/logo.png';"
+      />
+    </div>
+
+    <!-- Botão de Carregamento & Redirecionamento Automático -->
+    <div class="action-box">
+      <a href="https://www.icobicho.com" id="btn-redirect" class="btn-redirect">
+        <div class="btn-spinner"></div>
+        <div class="btn-text-content">
+          <span>Você está sendo redirecionado em</span>
+          <span class="countdown-number" id="countdown">3</span>
+        </div>
+        <!-- Barra de carregamento suave -->
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </a>
+      <p class="subtext-click">Ou toque acima para <strong>entrar agora</strong></p>
+    </div>
+
+  </main>
+
+  <!-- Rodapé Mínimo de Conformidade para o Facebook -->
+  <footer>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="openModal('terms')">Termos de Uso</a>
+      <span>•</span>
+      <a href="javascript:void(0)" onclick="openModal('privacy')">Política de Privacidade</a>
+    </div>
+    
+    <p class="meta-disclaimer">
+      Este site não é afiliado ao Facebook ou a qualquer entidade da Meta Platforms, Inc.
+    </p>
+  </footer>
+
+  <!-- Modal Discreto para Termos e Privacidade -->
+  <div id="infoModal" class="modal-overlay" onclick="closeModalOnBg(event)">
+    <div class="modal-content">
+      <h3 id="modalTitle">Termos de Uso</h3>
+      <div id="modalBody"></div>
+      <button class="modal-close" onclick="closeModal()">Fechar</button>
+    </div>
+  </div>
+
+  <script>
+    /* ========================================================================
+       DESTINO: https://www.icobicho.com
+       Repassa automaticamente todas as UTMs do anúncio
+    ======================================================================== */
+    const DESTINATION_URL = "https://www.icobicho.com";
+    const REDIRECT_DELAY_SECONDS = 3;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const btn = document.getElementById("btn-redirect");
+      const countdownEl = document.getElementById("countdown");
+      const progressBar = document.getElementById("progressBar");
+
+      // Monta URL de destino com os parâmetros UTM e fbclid preservados
+      const currentSearchParams = window.location.search;
+      let finalUrl = DESTINATION_URL;
+
+      if (currentSearchParams && currentSearchParams.length > 1) {
+        const separator = finalUrl.includes("?") ? "&" : "?";
+        finalUrl = finalUrl + separator + currentSearchParams.substring(1);
+      }
+
+      if (btn) btn.href = finalUrl;
+
+      // Anima a barra de progresso suavemente por 3 segundos
+      if (progressBar) {
+        requestAnimationFrame(() => {
+          progressBar.style.transition = `width ${REDIRECT_DELAY_SECONDS}s linear`;
+          progressBar.style.width = "100%";
+        });
+      }
+
+      // Contador regressivo: 3... 2... 1... -> Redireciona!
+      let remaining = REDIRECT_DELAY_SECONDS;
+      const timer = setInterval(() => {
+        remaining--;
+        if (remaining > 0) {
+          if (countdownEl) countdownEl.textContent = remaining;
+        } else {
+          clearInterval(timer);
+          if (countdownEl) countdownEl.textContent = "0";
+          // Redireciona automaticamente
+          window.location.href = finalUrl;
+        }
+      }, 1000);
+
+      // Se o usuário clicar no botão antes dos 3s, redireciona na hora
+      if (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          clearInterval(timer);
+          window.location.href = finalUrl;
+        });
+      }
+    });
+
+    /* ========================================================================
+       MODAL DE POLÍTICAS (COMPLIANCE META)
+    ======================================================================== */
+    const modalData = {
+      terms: {
+        title: "Termos de Uso",
+        body: "<p>Ao acessar este portal, você concorda com os termos de utilização estabelecidos e confirma ter mais de 18 anos de idade.</p>"
+      },
+      privacy: {
+        title: "Política de Privacidade",
+        body: "<p>Respeitamos a sua privacidade. Esta página não coleta nem compartilha dados cadastrais pessoais de seus usuários.</p>"
+      }
+    };
+
+    function openModal(type) {
+      const data = modalData[type];
+      if (!data) return;
+      document.getElementById("modalTitle").innerHTML = data.title;
+      document.getElementById("modalBody").innerHTML = data.body;
+      document.getElementById("infoModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("infoModal").style.display = "none";
+    }
+
+    function closeModalOnBg(e) {
+      if (e.target.id === "infoModal") {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>
